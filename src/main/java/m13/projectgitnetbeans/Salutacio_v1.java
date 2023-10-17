@@ -7,7 +7,7 @@ package m13.projectgitnetbeans;
  *
  * @author Oscar
  */
-public class Salutacio {
+public class Salutacio_v1 {
 
    public void saludar() {
       System.out.println("Hola Mon");

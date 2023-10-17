@@ -1,6 +1,6 @@
 package m13.projectgitnetbeans;
 
-import m13.projectgitnetbeans.Salutacio;
+import m13.projectgitnetbeans.Salutacio_v1;
 
 /**
  * https://youtu.be/q6RKq91FKC4?si=xLXU3hoyH1nrjp8i
@@ -11,7 +11,7 @@ import m13.projectgitnetbeans.Salutacio;
 public class ProjectGitNetbeans {
 
    public static void main(String[] args) {
-      new Salutacio().saludar();
+      new Salutacio_v1().saludar();
    }
 
 }
