@@ -20,6 +20,6 @@ public class Salutacio_v1 {
       System.out.println("Nou video");
       System.out.println("Regeneracio del token a GIT");
       System.out.println("altres");
-      System.out.println("---");
+      System.out.println("----");
    }
 }
