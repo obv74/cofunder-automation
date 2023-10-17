@@ -13,5 +13,6 @@ public class Salutacio {
       System.out.println("Hola Mon");
       System.out.println("Proves GIT-NETBEANS");
       System.out.println("Nou video");
+      System.out.println("Regeneracio del token a GIT");
    }
 }
