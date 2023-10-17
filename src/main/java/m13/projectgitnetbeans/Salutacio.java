@@ -14,5 +14,6 @@ public class Salutacio {
       System.out.println("Proves GIT-NETBEANS");
       System.out.println("Nou video");
       System.out.println("Regeneracio del token a GIT");
+      System.out.println("altres");
    }
 }
