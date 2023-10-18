@@ -21,5 +21,6 @@ public class Salutacio_v1 {
       System.out.println("Regeneracio del token a GIT");
       System.out.println("altres");
       System.out.println("----");
+      System.out.println("18/10/2023");
    }
 }
