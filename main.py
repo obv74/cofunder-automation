@@ -117,6 +117,15 @@ async def scrape_command(headless: bool = False, max_checks: int | None = None) 
         
         log.info("Waiting for page to render...")
         await asyncio.sleep(3)
+
+        # Fail fast if session is already logged out at startup.
+        if await controller.auth_handler.is_login_button_visible(page):
+            log.error("Detected login button at startup (session not authenticated).")
+            send_alert(
+                "Session appears logged out at scrape startup. Please run: python main.py login",
+                prefix="CoFounder Scrape",
+            )
+            return 1
         
         # Selectors
         # More specific selector - only match post cards that have the post content structure
