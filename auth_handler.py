@@ -93,18 +93,30 @@ class AuthenticationHandler:
         # Must be on cofounderslab
         if "cofounderslab.com" not in current_url:
             return False
-        # Login page or signup = not authenticated
+
+        # Login/signup routes are always unauthenticated.
         if "/login" in current_url or "/signup" in current_url or "/sign-in" in current_url:
             return False
 
-        # Clearly authenticated: feed or other post-login pages
+        # If login CTA is visible, user is logged out even if URL still looks like /feed.
+        if await self.is_login_button_visible(page):
+            return False
+
+        # Positive authenticated signal: post composer input shown on feed.
+        try:
+            composer = page.locator('input[placeholder="What\'s happening?"]')
+            if await composer.first.is_visible():
+                return True
+        except Exception:
+            pass
+
+        # Fallback URL-based check for common authenticated areas.
         if "cofounderslab.com/feed" in current_url:
             return True
-        # Other typical post-login paths (add as needed)
         if "/messages" in current_url or "/profile" in current_url or "/dashboard" in current_url:
             return True
 
-        # Homepage (/) or unknown path: do not assume logged in
+        # Homepage (/) or unknown path: do not assume logged in.
         return False
 
     async def is_login_button_visible(self, page: Page) -> bool:
@@ -115,15 +127,20 @@ class AuthenticationHandler:
         logged out.
         """
         try:
-            # Tailwind selector for the outer login button container.
-            # Escaped arbitrary values: py-[0.6rem], px-[1rem].
-            selector = (
-                "div.flex.cursor-pointer.items-center.justify-center.overflow-hidden."
-                "rounded-lg.border.border-gray-300.bg-gray-100."
-                "py-\\[0\\.6rem\\].px-\\[1rem\\].shadow-sm"
-            )
-            locator = page.locator(selector).filter(has_text="Login")
-            first = locator.first
-            return await first.is_visible()
+            # Prefer resilient text/role selectors over fragile utility-class chains.
+            candidates = [
+                page.get_by_role("button", name="Login"),
+                page.get_by_text("Login", exact=True),
+                page.get_by_text("Sign in", exact=False),
+                page.locator("a[href*='/login']"),
+                page.locator("button:has-text('Login')"),
+            ]
+            for locator in candidates:
+                try:
+                    if await locator.first.is_visible():
+                        return True
+                except Exception:
+                    continue
+            return False
         except Exception:
             return False
